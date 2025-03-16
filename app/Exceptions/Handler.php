@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Http;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -42,7 +43,13 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            $text = view('telegram.error', ['e' => $e])->render();
+            Http::post('https://api.telegram.org/bot7899597221:AAFKJhdX8DEETRCj-9D9BHXK9FkW_yg6tKM/sendMessage',
+                [
+                    'chat_id' => 1183136594,
+                    'text' => $text,
+                    'parse_mode' => 'html'
+                ])->json();
         });
     }
 }

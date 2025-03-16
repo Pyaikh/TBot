@@ -64,3 +64,98 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Telegram бот для продажи обуви
+
+Телеграм-бот на Laravel для продажи обуви различных брендов.
+
+## Функциональность
+
+Бот позволяет:
+- Выбрать бренд обуви (Adidas, Nike, Puma, Asics)
+- Выбрать конкретную модель кроссовок
+- Выбрать размер обуви (от 37 до 43)
+- Выбрать цвет обуви (черный, белый, синий, красный)
+- Указать адрес доставки
+- Выбрать способ оплаты (карта или наличные курьеру)
+
+## Требования
+
+- PHP 8.1+
+- Composer
+- MySQL или другая база данных
+- Telegram Bot Token (получить у @BotFather)
+
+## Установка
+
+1. Клонируйте репозиторий:
+```
+git clone https://github.com/yourusername/shoes-telegram-bot.git
+cd shoes-telegram-bot
+```
+
+2. Установите зависимости:
+```
+composer install
+```
+
+3. Скопируйте файл `.env.example` в `.env` и настройте параметры:
+```
+cp .env.example .env
+```
+
+4. Сгенерируйте ключ приложения:
+```
+php artisan key:generate
+```
+
+5. Настройте подключение к базе данных в файле `.env`:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=tg_shoe_bot
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+6. Настройте токен Telegram бота в файле `.env`:
+```
+TELEGRAM_BOT_TOKEN=ваш_токен_от_botfather
+```
+
+7. Создайте и заполните базу данных:
+```
+php artisan migrate --seed
+```
+
+8. Запустите веб-сервер:
+```
+php artisan serve
+```
+
+9. Настройте вебхук для бота (замените URL на ваш):
+```
+https://ваш_домен/api/telegram/set-webhook
+```
+
+## Структура бота
+
+### Диалоговый процесс
+
+1. **Старт** - Пользователь запускает бота командой `/start`
+2. **Выбор бренда** - Пользователь выбирает бренд из предложенных вариантов
+3. **Выбор модели** - После выбора бренда, пользователь выбирает конкретную модель
+4. **Выбор размера** - Выбор размера обуви
+5. **Выбор цвета** - Выбор цвета обуви
+6. **Ввод адреса** - Ввод информации о доставке (адрес, подъезд, квартира)
+7. **Выбор оплаты** - Выбор способа оплаты
+8. **Подтверждение** - Подтверждение заказа и возврат к началу для нового заказа
+
+### Основные файлы
+
+- `app/Http/Controllers/TelegramController.php` - Контроллер для обработки вебхуков
+- `app/Services/TelegramService.php` - Сервис для работы с API Telegram
+- `app/Models/` - Модели данных
+- `database/migrations/` - Миграции для создания таблиц
+- `database/seeders/DatabaseSeeder.php` - Сидер для наполнения базы данных тестовыми данными
