@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Маршруты для работы с изображениями
+Route::get('/images/brands/{filename}', [ImageController::class, 'showBrandImage']);
+Route::get('/images/shoes/{filename}', [ImageController::class, 'showShoeImage']);
+Route::post('/images/brands/upload', [ImageController::class, 'uploadBrandImage']);
+Route::post('/images/shoes/upload', [ImageController::class, 'uploadShoeImage']);
 

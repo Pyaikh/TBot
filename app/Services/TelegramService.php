@@ -15,10 +15,12 @@ class TelegramService
 {
     protected $botToken;
     protected $apiUrl = 'https://api.telegram.org/bot';
+    protected $appUrl;
 
     public function __construct()
     {
         $this->botToken = env('TELEGRAM_BOT_TOKEN');
+        $this->appUrl = env('APP_URL', 'http://localhost:8000');
     }
 
     public function handleUpdate($update)
@@ -128,6 +130,11 @@ class TelegramService
         $tempData['brand_id'] = $brandId;
         $user->update(['temp_data' => $tempData, 'current_state' => 'selecting_shoe']);
         
+        // Если у бренда есть изображение, отправляем его
+        if ($brand->image) {
+            $this->sendPhoto($user->chat_id, $this->getImageUrl($brand->image));
+        }
+        
         $keyboard = ['inline_keyboard' => []];
         
         foreach ($shoes as $shoe) {
@@ -157,7 +164,7 @@ class TelegramService
         
         // Отправляем фото обуви
         if ($shoe->image) {
-            $this->sendPhoto($user->chat_id, $shoe->image, $shoe->description);
+            $this->sendPhoto($user->chat_id, $this->getImageUrl($shoe->image), $shoe->description);
         }
         
         // Получаем доступные размеры
@@ -320,6 +327,23 @@ class TelegramService
         
         // Предлагаем сделать новый заказ
         return $this->sendStartMessage($user->chat_id);
+    }
+    
+    /**
+     * Получить полный URL для изображения
+     */
+    protected function getImageUrl($imagePath)
+    {
+        // Если путь начинается с http, значит это уже URL
+        if (strpos($imagePath, 'http') === 0) {
+            return $imagePath;
+        }
+        
+        // Определяем категорию (brands или shoes)
+        $category = strtok($imagePath, '/');
+        $filename = substr($imagePath, strpos($imagePath, '/') + 1);
+        
+        return $this->appUrl . '/images/' . $category . '/' . $filename;
     }
     
     public function sendMessage($chatId, $text, $keyboard = null)

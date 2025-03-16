@@ -53,10 +53,131 @@ class DatabaseSeeder extends Seeder
             Color::create($colorData);
         }
         
-        // Создаем модели обуви
+        // Получаем все бренды
+        $adidasBrand = Brand::where('name', 'Adidas')->first();
+        $nikeBrand = Brand::where('name', 'Nike')->first();
+        $pumaBrand = Brand::where('name', 'Puma')->first();
         $asicsBrand = Brand::where('name', 'Asics')->first();
         
-        $shoes = [
+        // Создаем модели обуви для Adidas
+        $adidasShoes = [
+            [
+                'brand_id' => $adidasBrand->id,
+                'name' => 'Adidas Superstar',
+                'description' => 'Классические кроссовки с фирменными тремя полосками',
+                'image' => 'shoes/adidas-superstar.jpg',
+                'price' => 8990
+            ],
+            [
+                'brand_id' => $adidasBrand->id,
+                'name' => 'Adidas Stan Smith',
+                'description' => 'Культовые кроссовки с минималистичным дизайном',
+                'image' => 'shoes/adidas-stan-smith.jpg',
+                'price' => 7990
+            ],
+            [
+                'brand_id' => $adidasBrand->id,
+                'name' => 'Adidas Ultraboost',
+                'description' => 'Беговые кроссовки с амортизирующей подошвой Boost',
+                'image' => 'shoes/adidas-ultraboost.jpg',
+                'price' => 13990
+            ],
+            [
+                'brand_id' => $adidasBrand->id,
+                'name' => 'Adidas NMD',
+                'description' => 'Стильные городские кроссовки для повседневной носки',
+                'image' => 'shoes/adidas-nmd.jpg',
+                'price' => 11990
+            ],
+            [
+                'brand_id' => $adidasBrand->id,
+                'name' => 'Adidas Gazelle',
+                'description' => 'Ретро-кроссовки из замши с контрастными полосками',
+                'image' => 'shoes/adidas-gazelle.jpg',
+                'price' => 8990
+            ]
+        ];
+        
+        // Создаем модели обуви для Nike
+        $nikeShoes = [
+            [
+                'brand_id' => $nikeBrand->id,
+                'name' => 'Nike Air Force 1',
+                'description' => 'Легендарные кроссовки с узнаваемым дизайном',
+                'image' => 'shoes/nike-air-force.jpg',
+                'price' => 9990
+            ],
+            [
+                'brand_id' => $nikeBrand->id,
+                'name' => 'Nike Air Max',
+                'description' => 'Кроссовки с видимой воздушной подушкой',
+                'image' => 'shoes/nike-air-max.jpg',
+                'price' => 12990
+            ],
+            [
+                'brand_id' => $nikeBrand->id,
+                'name' => 'Nike Blazer',
+                'description' => 'Классические кроссовки в стиле ретро',
+                'image' => 'shoes/nike-blazer.jpg',
+                'price' => 8490
+            ],
+            [
+                'brand_id' => $nikeBrand->id,
+                'name' => 'Nike Dunk Low',
+                'description' => 'Низкие баскетбольные кроссовки в разных цветах',
+                'image' => 'shoes/nike-dunk.jpg',
+                'price' => 10990
+            ],
+            [
+                'brand_id' => $nikeBrand->id,
+                'name' => 'Nike React',
+                'description' => 'Беговые кроссовки с пеной React для амортизации',
+                'image' => 'shoes/nike-react.jpg',
+                'price' => 11990
+            ]
+        ];
+        
+        // Создаем модели обуви для Puma
+        $pumaShoes = [
+            [
+                'brand_id' => $pumaBrand->id,
+                'name' => 'Puma Suede Classic',
+                'description' => 'Культовые кроссовки из замши',
+                'image' => 'shoes/puma-suede.jpg',
+                'price' => 7990
+            ],
+            [
+                'brand_id' => $pumaBrand->id,
+                'name' => 'Puma RS-X',
+                'description' => 'Массивные кроссовки в стиле 80-х',
+                'image' => 'shoes/puma-rs-x.jpg',
+                'price' => 9990
+            ],
+            [
+                'brand_id' => $pumaBrand->id,
+                'name' => 'Puma Cali',
+                'description' => 'Женские кроссовки на платформе',
+                'image' => 'shoes/puma-cali.jpg',
+                'price' => 8990
+            ],
+            [
+                'brand_id' => $pumaBrand->id,
+                'name' => 'Puma Future Rider',
+                'description' => 'Яркие кроссовки в стиле 80-х',
+                'image' => 'shoes/puma-future-rider.jpg',
+                'price' => 8490
+            ],
+            [
+                'brand_id' => $pumaBrand->id,
+                'name' => 'Puma Smash',
+                'description' => 'Классические кожаные кроссовки',
+                'image' => 'shoes/puma-smash.jpg',
+                'price' => 6990
+            ]
+        ];
+        
+        // Создаем модели обуви для Asics
+        $asicsShoes = [
             [
                 'brand_id' => $asicsBrand->id,
                 'name' => 'ASICS GEL-CONTEND T2F9N 9133',
@@ -94,7 +215,11 @@ class DatabaseSeeder extends Seeder
             ]
         ];
         
-        foreach ($shoes as $shoeData) {
+        // Объединяем все модели обуви
+        $allShoes = array_merge($adidasShoes, $nikeShoes, $pumaShoes, $asicsShoes);
+        
+        // Создаем модели и привязываем размеры и цвета
+        foreach ($allShoes as $shoeData) {
             $shoe = Shoe::create($shoeData);
             
             // Привязываем размеры и цвета к каждой модели
